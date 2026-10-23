@@ -11,11 +11,18 @@
     font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#151824;color:#f3f4f8;text-align:center}
   .card{background:#202437;border-radius:20px;padding:28px 22px;max-width:360px;width:100%}
   h1{font-size:26px;margin:0 0 10px}
+  h2{font-size:18px;margin:22px 0 6px}
   p{color:#8c92a8;margin:0 0 20px;line-height:1.5}
   a.btn{display:block;padding:15px;border-radius:14px;font-weight:700;text-decoration:none;margin-bottom:10px;background:#2c3150;color:#f3f4f8}
   a.btn.primary{background:#ffb627;color:#1c1c1c}
+  ol{text-align:left;padding:0;margin:0 0 6px;list-style:none;counter-reset:step}
+  ol li{counter-increment:step;margin-bottom:10px}
+  ol li::before{content:counter(step);display:inline-block;width:22px;height:22px;line-height:22px;border-radius:50%;
+    background:#ffb627;color:#1c1c1c;font-weight:800;font-size:13px;text-align:center;margin-right:8px}
+  ol li a.btn{margin:6px 0 0;text-align:center}
   code{display:block;word-break:break-all;background:#151824;border-radius:10px;padding:10px;font-size:13px;color:#f3f4f8;user-select:all}
   small{display:block;color:#8c92a8;margin:16px 0 6px}
+  .install h2{color:#ffb627}
 </style>
 </head>
 <body>
@@ -23,19 +30,28 @@
   <h1>⚔️ You've been challenged!</h1>
   <p>Same puzzle, one try. Clear more blocks than your friend, or the same number faster, to win.</p>
   <a class="btn primary" id="open" href="#">Open in Arrow Escape 3D</a>
-  <a class="btn" href="https://play.google.com/store/apps/details?id=com.koukou.arrowescape3d">Get the game on Google Play</a>
+  <div id="steps">
+    <h2>Don't have the game yet?</h2>
+    <p>It's in early testing, so it takes 3 quick steps (on your Android phone):</p>
+    <ol>
+      <li>Join the testers group<a class="btn" href="https://groups.google.com/g/arrow-escape-3d-testers">Join the group</a></li>
+      <li>Become a tester<a class="btn" href="https://play.google.com/apps/testing/com.koukou.arrowescape3d">Become a tester</a></li>
+      <li>Install the game, then come back and tap "Open in Arrow Escape 3D"<a class="btn" href="https://play.google.com/store/apps/details?id=com.koukou.arrowescape3d">Install from Google Play</a></li>
+    </ol>
+  </div>
   <small>Or copy this code and tap "📥 I got a code" in the game's 1v1 menu:</small>
   <code id="code"></code>
 </div>
 <script>
   const code = location.hash.slice(1).replace(/[^A-Za-z0-9_-]/g, '');
+  const android = /android/i.test(navigator.userAgent), install = location.search.includes('install');
   document.getElementById('code').textContent = code || '(no code in this link)';
-  // Android Chrome: opens the app if it's installed, otherwise the Play Store page
-  const store = 'https://play.google.com/store/apps/details?id=com.koukou.arrowescape3d';
-  const intent = `intent://duel/${code}#Intent;scheme=arrowescape3d;package=com.koukou.arrowescape3d;S.browser_fallback_url=${encodeURIComponent(store)};end`;
-  const link = /android/i.test(navigator.userAgent) ? intent : `arrowescape3d://duel/${code}`;
-  document.getElementById('open').href = link;
-  if (code && /android/i.test(navigator.userAgent)) location.href = intent;
+  // Android Chrome opens the app if it's installed; if not, it comes back here with ?install to show the steps
+  const back = location.origin + location.pathname + '?install#' + code;
+  const intent = `intent://duel/${code}#Intent;scheme=arrowescape3d;package=com.koukou.arrowescape3d;S.browser_fallback_url=${encodeURIComponent(back)};end`;
+  document.getElementById('open').href = android ? intent : `arrowescape3d://duel/${code}`;
+  if (install) document.getElementById('steps').className = 'install';
+  if (code && android && !install) location.href = intent;
 </script>
 </body>
 </html>
