@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arrow Escape 3D – 1v1 Challenge</title>
+<meta property="og:title" content="⚔️ You've been challenged in Arrow Escape 3D!">
+<meta property="og:description" content="Same puzzle, one try. Can you beat your friend?">
+<style>
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#151824;color:#f3f4f8;text-align:center}
+  .card{background:#202437;border-radius:20px;padding:28px 22px;max-width:360px;width:100%}
+  h1{font-size:26px;margin:0 0 10px}
+  p{color:#8c92a8;margin:0 0 20px;line-height:1.5}
+  a.btn{display:block;padding:15px;border-radius:14px;font-weight:700;text-decoration:none;margin-bottom:10px;background:#2c3150;color:#f3f4f8}
+  a.btn.primary{background:#ffb627;color:#1c1c1c}
+  code{display:block;word-break:break-all;background:#151824;border-radius:10px;padding:10px;font-size:13px;color:#f3f4f8;user-select:all}
+  small{display:block;color:#8c92a8;margin:16px 0 6px}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>⚔️ You've been challenged!</h1>
+  <p>Same puzzle, one try. Clear more blocks than your friend, or the same number faster, to win.</p>
+  <a class="btn primary" id="open" href="#">Open in Arrow Escape 3D</a>
+  <a class="btn" href="https://play.google.com/store/apps/details?id=com.koukou.arrowescape3d">Get the game on Google Play</a>
+  <small>Or copy this code and tap "📥 I got a code" in the game's 1v1 menu:</small>
+  <code id="code"></code>
+</div>
+<script>
+  const code = location.hash.slice(1).replace(/[^A-Za-z0-9_-]/g, '');
+  document.getElementById('code').textContent = code || '(no code in this link)';
+  // Android Chrome: opens the app if it's installed, otherwise the Play Store page
+  const store = 'https://play.google.com/store/apps/details?id=com.koukou.arrowescape3d';
+  const intent = `intent://duel/${code}#Intent;scheme=arrowescape3d;package=com.koukou.arrowescape3d;S.browser_fallback_url=${encodeURIComponent(store)};end`;
+  const link = /android/i.test(navigator.userAgent) ? intent : `arrowescape3d://duel/${code}`;
+  document.getElementById('open').href = link;
+  if (code && /android/i.test(navigator.userAgent)) location.href = intent;
+</script>
+</body>
+</html>
